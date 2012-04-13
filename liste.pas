@@ -98,6 +98,8 @@ function l_filter (f : cond ; liste : liste_int) : liste_int;
 function l_map (f : int_int ; liste : liste_int) : liste_int;
 { Applique `f` au element de `liste` qui respecte la consition `f2` }
 function l_filter_map (f : int_int ; f2 : cond ; liste : liste_int) : liste_int;
+{ Recupere les `i` premiers elements de `liste`. }
+function l_truncate (liste : liste_int ; i : integer) : liste_int;
 
 (* Fonctions sympas *)
 {zip, unzip, foldl, foldr, para, hylo, ana, cata }
@@ -415,6 +417,12 @@ begin
         l_filter_map := l_filter_map(f, f2, liste^.next);
 end; { l_filter_map }
 
+function l_truncate (liste : liste_int ; i : integer) : liste_int;
+begin
+    if i = 0 then l_truncate := nil
+             else l_truncate := l_cons(liste^.value, l_truncate(liste^.next, i - 1));
+end; { l_truncate }
+
 function l_map (f : int_int ; liste : liste_int) : liste_int;
 begin
     if liste = nil then
@@ -481,7 +489,7 @@ begin
     end;
 
     l_qsort := res;
-end; {l_qsort }
+end; { l_qsort }
 
 function l_couper (liste : liste_int) : couple_liste;
 var bouts : couple_liste;

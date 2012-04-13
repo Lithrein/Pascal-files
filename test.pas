@@ -24,7 +24,7 @@ end;
 
 var l, list, rev_list : liste_int;
 begin
-    list := l_cons(1, l_cons(1, l_cons(5, l_cons(8, l_cons(6, l_cons(9, l_cons(4, l_cons(7, l_cons(5, l_cons(3, nil))))))))));
+    list := l_truncate(l_shuffle(l_append(l_range(1,25), l_range(1, 25))), 10);
     rev_list := l_rev(list);
 
     write('list = ');        l_affiche(list);
