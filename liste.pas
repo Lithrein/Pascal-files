@@ -82,6 +82,8 @@ function l_remove (liste : liste_int ; j : integer ; var n : integer) : liste_in
 function l_range_s (i, j, s : integer) : liste_int; 
 { Genere la liste d'entiers [i..j] O(j-i) }
 function l_range (i, j : integer) : liste_int;
+{ Melange la liste `liste`. O(n^2) }
+function l_shuffle (liste : liste_int) : liste_int;
 { Fait la somme des elements de `liste` : O(n) }
 function l_sum (liste : liste_int) : integer;
 { Fait le produit des element de `liste` : O(n) }
@@ -121,7 +123,7 @@ function l_inter (liste1, liste2 : liste_int) : liste_int;
 { Retourne l'union de deux listes }
 function l_union (liste1, liste2 : liste_int) : liste_int;
 { Retourne la liste1 privee des elements de la liste2 }
-(*function l_minus (liste1, liste2 : liste_int) : liste_int;*)
+function l_minus (liste1, liste2 : liste_int) : liste_int;
 
 (* Fonction(s) d'affichage(s) *)
 
@@ -307,7 +309,30 @@ end; { l_range_s }
 function l_range(i, j : integer) : liste_int;
 begin
     l_range := l_range_s(i, j, 1);
-end; {l_range}
+end; { l_range }
+
+(* Si l'on voulait une complexite en O(n), il faudrait passer
+   par un tableau intermediaire. L'acces a un element serait 
+   alors en O(1). *)
+function l_shuffle (liste : liste_int) : liste_int;
+var size : integer;
+    alea : integer;
+    tmp : integer;
+    nouv_liste : liste_int;
+begin
+    nouv_liste := nil;
+    size := l_length(liste);
+
+    while size <> 0 do
+    begin
+        alea := random(size);
+        liste := l_remove(liste, alea, tmp); 
+        nouv_liste := l_cons(tmp, nouv_liste);
+        size := size - 1;
+    end;
+
+    l_shuffle := nouv_liste;
+end; { l_shuffle }
 
 function l_sum (liste : liste_int) : integer;
 var sum : integer;
@@ -456,7 +481,7 @@ begin
     end;
 
     l_qsort := res;
-end;
+end; {l_qsort }
 
 function l_couper (liste : liste_int) : couple_liste;
 var bouts : couple_liste;
@@ -478,7 +503,7 @@ begin
     end;
 
     l_couper := bouts;
-end;
+end; { l_couper }
 
 function l_fusion (f : rel_ord ; l1, l2 : liste_int) : liste_int;
 begin
@@ -491,7 +516,7 @@ begin
             l_fusion := l_cons(l2^.value, l_fusion(f, l1, l2^.next));
         end;
     end;
-end;
+end; { l_fusion }
 
 function l_mergesort (f : rel_ord ; liste : liste_int) : liste_int;
 var bouts : couple_liste;
@@ -504,17 +529,17 @@ begin
         bouts^.snd := l_mergesort(f, bouts^.snd);
         l_mergesort := l_fusion(f, bouts^.fst, bouts^.snd);
     end;
-end;
+end; { l_mergesort }
 
 function l_gt (x, y : integer) : boolean;
 begin
     l_gt := (x > y);
-end;
+end; { l_gt }
 
 function l_lt (x,y : integer) : boolean;
 begin
     l_lt := (x < y);
-end;
+end; { l_lt }
 
 function l_set (liste : liste_int) : liste_int;
 var nouv_liste : liste_int;
@@ -533,9 +558,10 @@ begin
 
     dispose(sorted);
     l_set := nouv_liste;
-end;
+end; { l_set }
 
 {function l_parts (liste : liste_int) : liste_int;}
+
 function l_inter (liste1, liste2 : liste_int) : liste_int;
 var nouv_liste : liste_int;
     sorted1    : liste_int;
@@ -561,7 +587,7 @@ begin
     dispose(sorted2);
     
     l_inter := nouv_liste;
-end;
+end; { l_inter }
 
 function l_union (liste1, liste2 : liste_int) : liste_int;
 var nouv_liste : liste_int;
@@ -596,9 +622,38 @@ begin
     dispose(sorted1);
     dispose(sorted2);
     l_union := nouv_liste;
-end;
+end; { l_union }
 
-{function l_minus (liste1, liste2 : liste_int) : liste_int;}
+function l_minus (liste1, liste2 : liste_int) : liste_int;
+var nouv_liste : liste_int;
+    sorted1    : liste_int;
+    sorted2    : liste_int;
+begin
+    sorted1 := l_qsort(@l_gt, liste1);
+    sorted2 := l_qsort(@l_gt, liste2);
+    nouv_liste := nil;
+
+    while (sorted1 <> nil) do
+    begin
+        if sorted2 = nil then begin
+            nouv_liste := l_cons(sorted1^.value, nouv_liste);
+            sorted1 := sorted1^.next;
+        end else if l_gt(sorted2^.value, sorted1^.value) then begin
+            nouv_liste := l_cons(sorted1^.value, nouv_liste);
+            sorted1 := sorted1^.next;
+        end else if l_gt(sorted1^.value, sorted2^.value) then begin
+            nouv_liste := l_cons(sorted1^.value, nouv_liste);
+            sorted1 := sorted1^.next;
+        end else begin
+            sorted1 := sorted1^.next;
+            sorted2 := sorted2^.next;
+        end;
+    end;
+
+    dispose(sorted1);
+    dispose(sorted2);
+    l_minus := nouv_liste;
+end; { l_minus }
 
 procedure l_affiche (liste : liste_int);
 begin
