@@ -42,7 +42,7 @@ type liste_int = ^cell;
 }
 
 
-(* Fonctions primorsiales *)
+(* Fonctions primordiales *)
 
 { Ajoute une la valeur `n' au debut de la liste `liste' }
 function l_cons (n : integer ; tl : liste_int) : liste_int;
@@ -76,9 +76,9 @@ function l_append (liste1, liste2 : liste_int) : liste_int;
 { Retire le j-ieme element de `liste` }
 function l_remove (liste : liste_int ; j : integer ; var n : integer) : liste_int;
 
-(* Fonction utilitaires  *)
+(* Fonctions utilitaires  *)
 
-{Genere la liste d'entiers [i..j] suivant le pas `p` }
+{ Genere la liste d'entiers [i..j] suivant le pas `p` }
 function l_range_s (i, j, s : integer) : liste_int; 
 { Genere la liste d'entiers [i..j] O(j-i) }
 function l_range (i, j : integer) : liste_int;
@@ -86,7 +86,7 @@ function l_range (i, j : integer) : liste_int;
 function l_shuffle (liste : liste_int) : liste_int;
 { Fait la somme des elements de `liste` : O(n) }
 function l_sum (liste : liste_int) : integer;
-{ Fait le produit des element de `liste` : O(n) }
+{ Fait le produit des elements de `liste` : O(n) }
 function l_prod (liste : liste_int) : integer;
 { Renvoie le maximum de `liste` : O(n) }
 function l_max (liste : liste_int) : integer;
@@ -94,9 +94,9 @@ function l_max (liste : liste_int) : integer;
 function l_min (liste : liste_int) : integer;
 { Renvoie la liste qui contient les elements passant le filtre 'f' }
 function l_filter (f : cond ; liste : liste_int) : liste_int;
-{ Applique `f` a toute la liste }
+{ Applique `f` a toute la liste `liste' }
 function l_map (f : int_int ; liste : liste_int) : liste_int;
-{ Applique `f` au element de `liste` qui respecte la consition `f2` }
+{ Applique `f` aux elements de `liste` qui respectent la consition `f2` }
 function l_filter_map (f : int_int ; f2 : cond ; liste : liste_int) : liste_int;
 { Recupere les `i` premiers elements de `liste`. }
 function l_truncate (liste : liste_int ; i : integer) : liste_int;
@@ -106,19 +106,20 @@ function l_truncate (liste : liste_int ; i : integer) : liste_int;
 { sous-liste max, min }
 { k-eme plus grand/petit}
 
-(* Fonction de tri *)
+(* Fonctions de tri *)
 
 { Coupe la liste en deux sous-listes suivant la condition booleenne `f` }
 function l_partition (f : cond ; liste : liste_int) : couple_liste;
-{ Tri la liste suivant quick_sort }
+{ Tri la liste suivant l'algorithme quick_sort }
 function l_qsort (f : rel_ord ; liste : liste_int) : liste_int;
-{ Tri de la liste suivant mergesort }
+{ Tri de la liste suivant l'algorithme mergesort }
 function l_mergesort (f : rel_ord ; liste : liste_int) : liste_int;
 
-(* Fonction ensembliste *)
-{ Determine l'ensemble associe a la liste. ie. sans doublon }
+(* Fonctions ensemblistes *)
+
+{ Determine l'ensemble associe a la liste `liste'. ie. sans doublon }
 function l_set   (liste : liste_int) : liste_int;
-{ Retourne l'ensemble des parties de la liste. }
+{ Retourne l'ensemble des parties de la liste `liste'. }
 (*function l_parts (liste : liste_int) : liste_int;*)
 { Retourne l'intersection de deux listes. }
 function l_inter (liste1, liste2 : liste_int) : liste_int;
